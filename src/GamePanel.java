@@ -48,10 +48,75 @@ public class GamePanel extends JPanel {
                 if(canPlay(turn,i,j)){
                     cells[i][j].highlight = 1;
                     cells[i][j].repaint();
+                    ArrayList<Point> rev = getReversePoints(turn,i,j);
+                    for(Point pt : rev){
+                        cells[pt.x][pt.y].highlight = 2;
+                        cells[pt.x][pt.y].repaint();
+                    }
                 }
             }
         }
+
         return null;
+    }
+
+    public ArrayList<Point> getReversePoints(int player,int i,int j){
+
+        ArrayList<Point> allReversePoints = new ArrayList<>();
+
+        int mi , mj , c;
+        int oplayer = ((player == 1) ? 2 : 1);
+
+        //move up
+        ArrayList<Point> mupts = new ArrayList<>();
+        mi = i - 1;
+        mj = j;
+        while(mi>0 && getBoardValue(mi,mj) == oplayer){
+            mupts.add(new Point(mi,mj));
+            mi--;
+        }
+        if(mi>=0 && getBoardValue(mi,mj) == player && mupts.size()>0){
+            allReversePoints.addAll(mupts);
+        }
+
+
+        //move down
+        ArrayList<Point> mdpts = new ArrayList<>();
+        mi = i + 1;
+        mj = j;
+        while(mi<7 && getBoardValue(mi,mj) == oplayer){
+            mdpts.add(new Point(mi,mj));
+            mi++;
+        }
+        if(mi<=7 && getBoardValue(mi,mj) == player && mdpts.size()>0){
+            allReversePoints.addAll(mdpts);
+        }
+
+        //move left
+        ArrayList<Point> mlpts = new ArrayList<>();
+        mi = i;
+        mj = j - 1;
+        while(mj>0 && getBoardValue(mi,mj) == oplayer){
+            mlpts.add(new Point(mi,mj));
+            mj--;
+        }
+        if(mj>=0 && getBoardValue(mi,mj) == player && mlpts.size()>0){
+            allReversePoints.addAll(mlpts);
+        }
+
+        //move right
+        ArrayList<Point> mrpts = new ArrayList<>();
+        mi = i;
+        mj = j + 1;
+        while(mj<7 && getBoardValue(mi,mj) == oplayer){
+            mlpts.add(new Point(mi,mj));
+            mj++;
+        }
+        if(mj<=7 && getBoardValue(mi,mj) == player && mrpts.size()>0){
+            allReversePoints.addAll(mrpts);
+        }
+
+        return allReversePoints;
     }
 
     public boolean canPlay(int player,int i,int j){

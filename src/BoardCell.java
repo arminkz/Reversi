@@ -25,6 +25,11 @@ public class BoardCell extends JLabel {
             g.fillRect(0,0,this.getWidth(),this.getHeight());
             g.setColor(parent.getBackground());
             g.fillRect(4,4,this.getWidth()-8,this.getHeight()-8);
+        }else if(highlight == 2){
+            g.setColor(new Color(177, 158, 70));
+            g.fillRect(0,0,this.getWidth(),this.getHeight());
+            g.setColor(parent.getBackground());
+            g.fillRect(4,4,this.getWidth()-8,this.getHeight()-8);
         }
 
         //draw border
