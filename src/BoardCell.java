@@ -1,7 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public class BoardCell extends JLabel {
+public class BoardCell extends JLabel implements MouseListener{
 
     int i;
     int j;
@@ -14,6 +16,7 @@ public class BoardCell extends JLabel {
         this.parent = parent;
         this.i = i;
         this.j = j;
+        this.addMouseListener(this);
     }
 
     @Override
@@ -51,5 +54,29 @@ public class BoardCell extends JLabel {
         //g.drawOval(10,10,this.getWidth()-20,this.getHeight()-20);
         super.paint(g);
     }
-    
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        parent.handleClick(i,j);
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
 }
