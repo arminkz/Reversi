@@ -23,6 +23,12 @@ public class GamePanel extends JPanel {
     JLabel score1;
     JLabel score2;
 
+    int totalscore1 = 0;
+    int totalscore2 = 0;
+
+    JLabel tscore1;
+    JLabel tscore2;
+
 
     GamePlayer player1 = new RandomPlayer(1);
     GamePlayer player2 = new GreedyPlayer(2);
@@ -40,7 +46,9 @@ public class GamePanel extends JPanel {
         reversiBoard.setPreferredSize(new Dimension(500,500));
         reversiBoard.setBackground(new Color(41,100, 59));
 
-        board = new int[8][8];
+        //init board
+        resetBoard();
+
         cells = new BoardCell[8][8];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -57,31 +65,33 @@ public class GamePanel extends JPanel {
         score1 = new JLabel("Score 1");
         score2 = new JLabel("Score 2");
 
+        tscore1 = new JLabel("Total Score 1");
+        tscore2 = new JLabel("Total Score 2");
+
         sidebar.add(score1);
         sidebar.add(score2);
+
+        sidebar.add(new JLabel("-----------"));
+
+        sidebar.add(tscore1);
+        sidebar.add(tscore2);
 
 
         this.add(sidebar,BorderLayout.WEST);
         this.add(reversiBoard);
 
-
-        //initial board state
-        setBoardValue(3,3,2);
-        setBoardValue(3,4,1);
-        setBoardValue(4,3,1);
-        setBoardValue(4,4,2);
-
         //
         updateBoardInfo();
+        updateTotalScore();
 
         //AI Handler Timer (to unfreeze gui)
-        player1HandlerTimer = new Timer(50,(ActionEvent e) -> {
+        player1HandlerTimer = new Timer(500,(ActionEvent e) -> {
             handleAI(player1);
             player1HandlerTimer.stop();
             manageTurn();
         });
 
-        player2HandlerTimer = new Timer(50,(ActionEvent e) -> {
+        player2HandlerTimer = new Timer(500,(ActionEvent e) -> {
             handleAI(player2);
             player2HandlerTimer.stop();
             manageTurn();
@@ -93,28 +103,63 @@ public class GamePanel extends JPanel {
     private boolean awaitForClick = false;
 
     public void manageTurn(){
-        if(BoardHelper.hasAnyMoves(board,turn)) {
+        if(BoardHelper.hasAnyMoves(board,1) || BoardHelper.hasAnyMoves(board,2)) {
             if (turn == 1) {
-                if (player1.isUserPlayer()) {
-                    awaitForClick = true;
-                    //after click this function should be call backed
-                } else {
-                    player1HandlerTimer.start();
+                if(BoardHelper.hasAnyMoves(board,1)) {
+                    if (player1.isUserPlayer()) {
+                        awaitForClick = true;
+                        //after click this function should be call backed
+                    } else {
+                        player1HandlerTimer.start();
+                    }
+                }else{
+                    //forfeit this move and pass the turn
+                    System.out.println("Player 1 has no legal moves !");
+                    turn = 2;
+                    manageTurn();
                 }
             } else {
-                if (player2.isUserPlayer()) {
-                    awaitForClick = true;
-                    //after click this function should be call backed
-                } else {
-                    player2HandlerTimer.start();
+                if(BoardHelper.hasAnyMoves(board,2)) {
+                    if (player2.isUserPlayer()) {
+                        awaitForClick = true;
+                        //after click this function should be call backed
+                    } else {
+                        player2HandlerTimer.start();
+                    }
+                }else{
+                    //forfeit this move and pass the turn
+                    System.out.println("Player 2 has no legal moves !");
+                    turn = 1;
+                    manageTurn();
                 }
             }
         }else{
             //game finished
             System.out.println("Game Finished !");
+            int winner = BoardHelper.getWinner(board);
+            if(winner==1) totalscore1++;
+            else if(winner==2) totalscore2++;
+            updateTotalScore();
+            //restart
+            resetBoard();
+            turn=1;
+            manageTurn();
         }
     }
 
+    public void resetBoard(){
+        board = new int[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board[i][j]=0;
+            }
+        }
+        //initial board state
+        setBoardValue(3,3,2);
+        setBoardValue(3,4,1);
+        setBoardValue(4,3,1);
+        setBoardValue(4,4,2);
+    }
 
     public int getBoardValue(int i,int j){
         return board[i][j];
@@ -145,6 +190,11 @@ public class GamePanel extends JPanel {
 
         score1.setText(player1.playerName() + " : " + p1score);
         score2.setText(player2.playerName() + " : " + p2score);
+    }
+
+    public void updateTotalScore(){
+        tscore1.setText(player1.playerName() + " : " + totalscore1);
+        tscore2.setText(player2.playerName() + " : " + totalscore2);
     }
 
     public void handleClick(int i,int j){

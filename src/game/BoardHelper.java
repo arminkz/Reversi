@@ -5,9 +5,39 @@ import java.util.ArrayList;
 
 public class BoardHelper {
 
-    /*public static int getWinner(int[][] board){
-        return 0;
-    }*/
+
+    public static int getWinner(int[][] board){
+        if(hasAnyMoves(board,1) || hasAnyMoves(board,2))
+            //game not finished
+            return -1;
+        else{
+            //count stones
+            int p1s = getStoneCount(board,1);
+            int p2s = getStoneCount(board,2);
+
+            if(p1s == p2s){
+                //tie
+                return 0;
+            }else if(p1s > p2s){
+                //p1 wins
+                return 1;
+            }else{
+                //p2 wins
+                return 2;
+            }
+        }
+    }
+
+    public static int getStoneCount(int[][] board, int player){
+        int score = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(board[i][j] == player) score++;
+            }
+        }
+        return score;
+    }
+
 
     public static boolean hasAnyMoves(int[][] board, int player){
         return getAllPossibleMoves(board,player).size() > 0;
@@ -230,6 +260,26 @@ public class BoardHelper {
 
         //when all hopes fade away
         return false;
+    }
+
+    public int[][] getNewBoardAfterMove(int[][] board, Point move , int player){
+        //get clone of old board
+        int[][] newboard = new int[8][8];
+        for (int k = 0; k < 8; k++) {
+            for (int l = 0; l < 8; l++) {
+                newboard[k][l] = board[k][l];
+            }
+        }
+
+        //place piece
+        newboard[move.x][move.y] = player;
+        //reverse pieces
+        ArrayList<Point> rev = BoardHelper.getReversePoints(board,player,move.x,move.y);
+        for(Point pt : rev){
+            board[pt.x][pt.y] = player;
+        }
+
+        return newboard;
     }
 
 }
