@@ -1,5 +1,7 @@
 package game;
 
+import player.GreedyPlayer;
+import player.HumanPlayer;
 import player.RandomPlayer;
 
 import javax.swing.*;
@@ -9,23 +11,25 @@ import java.util.ArrayList;
 
 public class GamePanel extends JPanel {
 
+    //reversi board
     int[][] board;
+
+    //player turn
+    //white plays first
+    int turn = 1;
+
+    //swing elements
     BoardCell[][] cells;
     JLabel score1;
     JLabel score2;
 
-    //player turn
-    //black plays first
-    int turn = 2;
-    int aiTurn = 1;
-    int playerTurn = 2;
 
-    String name1 = "Random Player (AI)";
-    String name2 = "User";
+    GamePlayer player1 = new RandomPlayer(1);
+    GamePlayer player2 = new GreedyPlayer(2);
 
-    GameAI ai = new RandomPlayer();
+    Timer player1HandlerTimer;
+    Timer player2HandlerTimer;
 
-    Timer playerHandlerTimer;
 
     public GamePanel(){
         this.setBackground(Color.WHITE);
@@ -70,12 +74,47 @@ public class GamePanel extends JPanel {
         //
         updateBoardInfo();
 
-        //AI Handler Timer
-        playerHandlerTimer = new Timer(500,(ActionEvent e) -> {
-            handleAI(ai);
-            playerHandlerTimer.stop();
+        //AI Handler Timer (to unfreeze gui)
+        player1HandlerTimer = new Timer(50,(ActionEvent e) -> {
+            handleAI(player1);
+            player1HandlerTimer.stop();
+            manageTurn();
         });
+
+        player2HandlerTimer = new Timer(50,(ActionEvent e) -> {
+            handleAI(player2);
+            player2HandlerTimer.stop();
+            manageTurn();
+        });
+
+        manageTurn();
     }
+
+    private boolean awaitForClick = false;
+
+    public void manageTurn(){
+        if(BoardHelper.hasAnyMoves(board,turn)) {
+            if (turn == 1) {
+                if (player1.isUserPlayer()) {
+                    awaitForClick = true;
+                    //after click this function should be call backed
+                } else {
+                    player1HandlerTimer.start();
+                }
+            } else {
+                if (player2.isUserPlayer()) {
+                    awaitForClick = true;
+                    //after click this function should be call backed
+                } else {
+                    player2HandlerTimer.start();
+                }
+            }
+        }else{
+            //game finished
+            System.out.println("Game Finished !");
+        }
+    }
+
 
     public int getBoardValue(int i,int j){
         return board[i][j];
@@ -104,15 +143,13 @@ public class GamePanel extends JPanel {
             }
         }
 
-        score1.setText(name1 + " : " + p1score);
-        score2.setText(name2 + " : " + p2score);
+        score1.setText(player1.playerName() + " : " + p1score);
+        score2.setText(player2.playerName() + " : " + p2score);
     }
 
     public void handleClick(int i,int j){
-        if(turn==playerTurn && BoardHelper.canPlay(board,turn,i,j)){
+        if(awaitForClick && BoardHelper.canPlay(board,turn,i,j)){
             System.out.println("User Played in : "+ i + " , " + j);
-            //unhighlight all points
-            //cells[i][j].highlight = 0;
 
             //place piece
             board[i][j] = turn;
@@ -129,44 +166,33 @@ public class GamePanel extends JPanel {
 
             repaint();
 
-            //trigger next player
-            playerHandlerTimer.start();
+            awaitForClick = false;
+
+            //callback
+            manageTurn();
         }
     }
 
-    public void handleAI(GameAI ai){
-        if(turn == aiTurn) {
-            Point aiPlayPoint = ai.play(board, aiTurn);
-            int i = aiPlayPoint.x;
-            int j = aiPlayPoint.y;
-            System.out.println("AI Played in : "+ i + " , " + j);
+    public void handleAI(GamePlayer ai){
+        Point aiPlayPoint = ai.play(board);
+        int i = aiPlayPoint.x;
+        int j = aiPlayPoint.y;
+        System.out.println(ai.playerName() + " Played in : "+ i + " , " + j);
 
-            //place piece
-            board[i][j] = turn;
-            //reverse pieces
-            ArrayList<Point> rev = BoardHelper.getReversePoints(board,turn,i,j);
-            for(Point pt : rev){
-                board[pt.x][pt.y] = turn;
-            }
-
-            //advance turn
-            turn = (turn == 1) ? 2 : 1;
-            //
-            updateBoardInfo();
-
-            repaint();
+        //place piece
+        board[i][j] = turn;
+        //reverse pieces
+        ArrayList<Point> rev = BoardHelper.getReversePoints(board,turn,i,j);
+        for(Point pt : rev){
+            board[pt.x][pt.y] = turn;
         }
+
+        //advance turn
+        turn = (turn == 1) ? 2 : 1;
+        //
+        updateBoardInfo();
+
+        repaint();
     }
-
-    private void repaintBoard(){
-        //repait board
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                cells[i][j].repaint();
-            }
-        }
-    }
-
-
 
 }

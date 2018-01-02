@@ -6,14 +6,27 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class RandomPlayer extends GameAI {
+public class RandomPlayer extends GamePlayer {
 
     Random rnd = new Random();
 
-    @Override
-    public Point play(int[][] board, int myMark) {
+    public RandomPlayer(int mark) {
+        super(mark);
+    }
 
-        ArrayList<Point> myPossibleMoves = GamePanel.getAllPossibleMoves(board,myMark);
+    @Override
+    public boolean isUserPlayer() {
+        return false;
+    }
+
+    @Override
+    public String playerName() {
+        return "Random Player";
+    }
+
+    @Override
+    public Point play(int[][] board) {
+        ArrayList<Point> myPossibleMoves = BoardHelper.getAllPossibleMoves(board,myMark);
 
         if(myPossibleMoves.size() > 0){
             return myPossibleMoves.get(rnd.nextInt(myPossibleMoves.size()));

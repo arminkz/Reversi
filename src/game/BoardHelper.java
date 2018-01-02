@@ -5,6 +5,14 @@ import java.util.ArrayList;
 
 public class BoardHelper {
 
+    /*public static int getWinner(int[][] board){
+        return 0;
+    }*/
+
+    public static boolean hasAnyMoves(int[][] board, int player){
+        return getAllPossibleMoves(board,player).size() > 0;
+    }
+
     public static ArrayList<Point> getAllPossibleMoves(int[][] board, int player){
         ArrayList<Point> result = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
