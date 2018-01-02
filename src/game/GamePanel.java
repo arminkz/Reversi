@@ -10,6 +10,8 @@ public class GamePanel extends JPanel {
     //player turn
     //black plays first
     int turn = 2;
+    int aiTurn = 1;
+    int playerTurn = 2;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(500,500));
@@ -57,11 +59,34 @@ public class GamePanel extends JPanel {
     }
 
     public void handleClick(int i,int j){
-
-        if(canPlay(turn,i,j)){
+        if(turn==playerTurn && canPlay(turn,i,j)){
             System.out.println("User Played in : "+ i + " , " + j);
             //unhighlight all points
             //cells[i][j].highlight = 0;
+
+            //place piece
+            board[i][j] = turn;
+            //reverse pieces
+            ArrayList<Point> rev = getReversePoints(turn,i,j);
+            for(Point pt : rev){
+                board[pt.x][pt.y] = turn;
+            }
+
+            //advance turn
+            turn = (turn == 1) ? 2 : 1;
+            //
+            highlightPossibleMoves();
+
+            repaint();
+        }
+    }
+
+    public void handleAI(GameAI ai){
+        if(turn == aiTurn) {
+            Point aiPlayPoint = ai.play(board, aiTurn);
+            int i = aiPlayPoint.x;
+            int j = aiPlayPoint.y;
+            System.out.println("AI Played in : "+ i + " , " + j);
 
             //place piece
             board[i][j] = turn;
