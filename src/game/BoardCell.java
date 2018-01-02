@@ -10,11 +10,13 @@ public class BoardCell extends JLabel implements MouseListener{
     int i;
     int j;
 
-    GamePanel parent;
+    GamePanel gp;
+    JPanel parent;
 
     int highlight = 0;
 
-    public BoardCell(GamePanel parent,int i,int j){
+    public BoardCell(GamePanel gp ,JPanel parent,int i,int j){
+        this.gp = gp;
         this.parent = parent;
         this.i = i;
         this.j = j;
@@ -42,7 +44,7 @@ public class BoardCell extends JLabel implements MouseListener{
         g.drawRect(0,0,this.getWidth(),this.getHeight());
 
         //draw piece
-        int value = parent.getBoardValue(i,j);
+        int value = gp.getBoardValue(i,j);
         if(value == 1){
             g.setColor(Color.WHITE);
             g.fillOval(10,10,this.getWidth()-20,this.getHeight()-20);
@@ -64,7 +66,7 @@ public class BoardCell extends JLabel implements MouseListener{
 
     @Override
     public void mousePressed(MouseEvent e) {
-        parent.handleClick(i,j);
+        gp.handleClick(i,j);
     }
 
     @Override

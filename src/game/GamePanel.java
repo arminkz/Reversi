@@ -11,6 +11,8 @@ public class GamePanel extends JPanel {
 
     int[][] board;
     BoardCell[][] cells;
+    JLabel score1;
+    JLabel score2;
 
     //player turn
     //black plays first
@@ -23,19 +25,38 @@ public class GamePanel extends JPanel {
     Timer playerHandlerTimer;
 
     public GamePanel(){
-        this.setPreferredSize(new Dimension(500,500));
-        this.setBackground(new Color(41,100, 59));
+        this.setBackground(Color.WHITE);
+        this.setLayout(new BorderLayout());
 
-        this.setLayout(new GridLayout(8,8));
+        JPanel reversiBoard = new JPanel();
+        reversiBoard.setLayout(new GridLayout(8,8));
+        reversiBoard.setPreferredSize(new Dimension(500,500));
+        reversiBoard.setBackground(new Color(41,100, 59));
 
         board = new int[8][8];
         cells = new BoardCell[8][8];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                cells[i][j] = new BoardCell(this,i,j);
-                this.add(cells[i][j]);
+                cells[i][j] = new BoardCell(this,reversiBoard,i,j);
+                reversiBoard.add(cells[i][j]);
             }
         }
+
+
+        JPanel sidebar = new JPanel();
+        sidebar.setLayout(new BoxLayout(sidebar,BoxLayout.Y_AXIS));
+        sidebar.setPreferredSize(new Dimension(150,0));
+
+        score1 = new JLabel("Score 1");
+        score2 = new JLabel("Score 2");
+
+        sidebar.add(score1);
+        sidebar.add(score2);
+
+
+        this.add(sidebar,BorderLayout.WEST);
+        this.add(reversiBoard);
+
 
         //initial board state
         setBoardValue(3,3,2);
@@ -44,7 +65,7 @@ public class GamePanel extends JPanel {
         setBoardValue(4,4,2);
 
         //
-        highlightPossibleMoves();
+        updateBoardInfo();
 
         //AI Handler Timer
         playerHandlerTimer = new Timer(500,(ActionEvent e) -> {
@@ -61,9 +82,17 @@ public class GamePanel extends JPanel {
         board[i][j] = value;
     }
 
-    public void highlightPossibleMoves(){
+    //update highlights on possible moves and scores
+    public void updateBoardInfo(){
+
+        int p1score = 0;
+        int p2score = 0;
+
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
+                if(board[i][j] == 1) p1score++;
+                if(board[i][j] == 2) p2score++;
+
                 if(canPlay(board,turn,i,j)){
                     cells[i][j].highlight = 1;
                 }else{
@@ -71,6 +100,9 @@ public class GamePanel extends JPanel {
                 }
             }
         }
+
+        score1.setText("Score 1 : " + p1score);
+        score2.setText("Score 2 : " + p2score);
     }
 
     public void handleClick(int i,int j){
@@ -90,7 +122,7 @@ public class GamePanel extends JPanel {
             //advance turn
             turn = (turn == 1) ? 2 : 1;
             //
-            highlightPossibleMoves();
+            updateBoardInfo();
 
             repaint();
 
@@ -117,7 +149,7 @@ public class GamePanel extends JPanel {
             //advance turn
             turn = (turn == 1) ? 2 : 1;
             //
-            highlightPossibleMoves();
+            updateBoardInfo();
 
             repaint();
         }
