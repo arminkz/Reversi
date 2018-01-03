@@ -6,8 +6,11 @@ import java.awt.*;
 
 public class AIPlayer extends GamePlayer {
 
-    public AIPlayer(int mark) {
+    private int searchDepth;
+
+    public AIPlayer(int mark,int depth) {
         super(mark);
+        searchDepth = depth;
     }
 
     @Override
@@ -17,11 +20,11 @@ public class AIPlayer extends GamePlayer {
 
     @Override
     public String playerName() {
-        return "Minimax AI (Depth 3)";
+        return "Minimax AI (Depth " + searchDepth + ")";
     }
 
     @Override
     public Point play(int[][] board) {
-        return Minimax.solve(board,myMark,3);
+        return Minimax.solve(board,myMark,searchDepth);
     }
 }

@@ -1,16 +1,13 @@
 package game;
 
-import player.GreedyPlayer;
-import player.HumanPlayer;
-import player.RandomPlayer;
-import player.ai.AIPlayer;
+import player.*;
+import player.ai.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements GameEngine {
 
     //reversi board
     int[][] board;
@@ -31,12 +28,21 @@ public class GamePanel extends JPanel {
     JLabel tscore2;
 
 
-    GamePlayer player1 = new GreedyPlayer(1);
-    GamePlayer player2 = new AIPlayer(2);
+    GamePlayer player1 = new AIPlayer(1,6);
+    GamePlayer player2 = new AIPlayer(2, 3);
 
     Timer player1HandlerTimer;
     Timer player2HandlerTimer;
 
+    @Override
+    public int getBoardValue(int i,int j){
+        return board[i][j];
+    }
+
+    @Override
+    public void setBoardValue(int i,int j,int value){
+        board[i][j] = value;
+    }
 
     public GamePanel(){
         this.setBackground(Color.WHITE);
@@ -86,13 +92,13 @@ public class GamePanel extends JPanel {
         updateTotalScore();
 
         //AI Handler Timer (to unfreeze gui)
-        player1HandlerTimer = new Timer(20,(ActionEvent e) -> {
+        player1HandlerTimer = new Timer(500,(ActionEvent e) -> {
             handleAI(player1);
             player1HandlerTimer.stop();
             manageTurn();
         });
 
-        player2HandlerTimer = new Timer(20,(ActionEvent e) -> {
+        player2HandlerTimer = new Timer(500,(ActionEvent e) -> {
             handleAI(player2);
             player2HandlerTimer.stop();
             manageTurn();
@@ -163,14 +169,6 @@ public class GamePanel extends JPanel {
         setBoardValue(4,4,2);
     }
 
-    public int getBoardValue(int i,int j){
-        return board[i][j];
-    }
-
-    public void setBoardValue(int i,int j,int value){
-        board[i][j] = value;
-    }
-
     //update highlights on possible moves and scores
     public void updateBoardInfo(){
 
@@ -199,6 +197,7 @@ public class GamePanel extends JPanel {
         tscore2.setText(player2.playerName() + " : " + totalscore2);
     }
 
+    @Override
     public void handleClick(int i,int j){
         if(awaitForClick && BoardHelper.canPlay(board,turn,i,j)){
             System.out.println("User Played in : "+ i + " , " + j);
