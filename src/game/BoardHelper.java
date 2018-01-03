@@ -5,9 +5,13 @@ import java.util.ArrayList;
 
 public class BoardHelper {
 
+    public static boolean isGameFinished(int[][] board){
+       return hasAnyMoves(board,1) || hasAnyMoves(board,2);
+    }
+
 
     public static int getWinner(int[][] board){
-        if(hasAnyMoves(board,1) || hasAnyMoves(board,2))
+        if(isGameFinished(board))
             //game not finished
             return -1;
         else{
@@ -262,7 +266,7 @@ public class BoardHelper {
         return false;
     }
 
-    public int[][] getNewBoardAfterMove(int[][] board, Point move , int player){
+    public static int[][] getNewBoardAfterMove(int[][] board, Point move , int player){
         //get clone of old board
         int[][] newboard = new int[8][8];
         for (int k = 0; k < 8; k++) {
@@ -274,9 +278,9 @@ public class BoardHelper {
         //place piece
         newboard[move.x][move.y] = player;
         //reverse pieces
-        ArrayList<Point> rev = BoardHelper.getReversePoints(board,player,move.x,move.y);
+        ArrayList<Point> rev = BoardHelper.getReversePoints(newboard,player,move.x,move.y);
         for(Point pt : rev){
-            board[pt.x][pt.y] = player;
+            newboard[pt.x][pt.y] = player;
         }
 
         return newboard;

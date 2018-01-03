@@ -3,6 +3,7 @@ package game;
 import player.GreedyPlayer;
 import player.HumanPlayer;
 import player.RandomPlayer;
+import player.ai.AIPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +31,7 @@ public class GamePanel extends JPanel {
     JLabel tscore2;
 
 
-    GamePlayer player1 = new RandomPlayer(1);
+    GamePlayer player1 = new HumanPlayer(1);
     GamePlayer player2 = new GreedyPlayer(2);
 
     Timer player1HandlerTimer;
@@ -60,7 +61,7 @@ public class GamePanel extends JPanel {
 
         JPanel sidebar = new JPanel();
         sidebar.setLayout(new BoxLayout(sidebar,BoxLayout.Y_AXIS));
-        sidebar.setPreferredSize(new Dimension(150,0));
+        sidebar.setPreferredSize(new Dimension(200,0));
 
         score1 = new JLabel("Score 1");
         score2 = new JLabel("Score 2");
@@ -104,6 +105,7 @@ public class GamePanel extends JPanel {
 
     public void manageTurn(){
         if(BoardHelper.hasAnyMoves(board,1) || BoardHelper.hasAnyMoves(board,2)) {
+            updateBoardInfo();
             if (turn == 1) {
                 if(BoardHelper.hasAnyMoves(board,1)) {
                     if (player1.isUserPlayer()) {
@@ -201,18 +203,11 @@ public class GamePanel extends JPanel {
         if(awaitForClick && BoardHelper.canPlay(board,turn,i,j)){
             System.out.println("User Played in : "+ i + " , " + j);
 
-            //place piece
-            board[i][j] = turn;
-            //reverse pieces
-            ArrayList<Point> rev = BoardHelper.getReversePoints(board,turn,i,j);
-            for(Point pt : rev){
-                board[pt.x][pt.y] = turn;
-            }
+            //update board
+            board = BoardHelper.getNewBoardAfterMove(board,new Point(i,j),turn);
 
             //advance turn
             turn = (turn == 1) ? 2 : 1;
-            //
-            updateBoardInfo();
 
             repaint();
 
@@ -227,20 +222,14 @@ public class GamePanel extends JPanel {
         Point aiPlayPoint = ai.play(board);
         int i = aiPlayPoint.x;
         int j = aiPlayPoint.y;
+        if(!BoardHelper.canPlay(board,ai.myMark,i,j)) System.err.println("FATAL : AI Invalid Move !");
         System.out.println(ai.playerName() + " Played in : "+ i + " , " + j);
 
-        //place piece
-        board[i][j] = turn;
-        //reverse pieces
-        ArrayList<Point> rev = BoardHelper.getReversePoints(board,turn,i,j);
-        for(Point pt : rev){
-            board[pt.x][pt.y] = turn;
-        }
+        //update board
+        board = BoardHelper.getNewBoardAfterMove(board,aiPlayPoint,turn);
 
         //advance turn
         turn = (turn == 1) ? 2 : 1;
-        //
-        updateBoardInfo();
 
         repaint();
     }
