@@ -16,8 +16,8 @@ public class Minimax {
             //create new node
             int[][] newNode = BoardHelper.getNewBoardAfterMove(board,move,player);
             //recursive call
-            int childScore = MM(newNode,player,depth-1,false);
-            if(childScore > bestScore) {
+            int childScore = MMAB(newNode,player,depth-1,false,Integer.MIN_VALUE,Integer.MAX_VALUE);
+                if(childScore > bestScore) {
                 bestScore = childScore;
                 bestMove = move;
             }
@@ -34,14 +34,14 @@ public class Minimax {
             //create new node
             int[][] newNode = BoardHelper.getNewBoardAfterMove(board,move,player);
             //recursive call
-            int childScore = MM(newNode,player,depth-1,false);
+            int childScore = MMAB(newNode,player,depth-1,false,Integer.MIN_VALUE,Integer.MAX_VALUE);
             BP.cells[move.x][move.y].text = String.valueOf(childScore);
         }
         BP.repaint();
     }
 
     //returns minimax value for a given node
-    private static int MM(int[][] node,int player,int depth,boolean max){
+    /*private static int MM(int[][] node,int player,int depth,boolean max){
         //if terminal reached or depth limit reached evaluate
         if(depth == 0 || BoardHelper.isGameFinished(node)){
             //BoardPrinter bpe = new BoardPrinter(node,"Depth : " + depth);
@@ -73,6 +73,50 @@ public class Minimax {
                 //recursive call
                 int childScore = MM(newNode,player,depth-1,true);
                 if(childScore < score) score = childScore;
+            }
+        }
+        return score;
+    }*/
+
+    //returns minimax value for a given node with a/b pruning
+    private static int MMAB(int[][] node,int player,int depth,boolean max,int alpha,int beta){
+        //if terminal reached or depth limit reached evaluate
+        if(depth == 0 || BoardHelper.isGameFinished(node)){
+            //BoardPrinter bpe = new BoardPrinter(node,"Depth : " + depth);
+            return Evaluator.eval(node,player);
+        }
+        int oplayer = (player==1) ? 2 : 1;
+        //if no moves available then forfeit turn
+        if((max && !BoardHelper.hasAnyMoves(node,player)) || (!max && !BoardHelper.hasAnyMoves(node,oplayer))){
+            System.out.println("Forfeit State Reached !");
+            return MMAB(node,player,depth-1,!max,alpha,beta);
+        }
+        int score;
+        if(max){
+            //maximizing
+            score = Integer.MIN_VALUE;
+            for(Point move : BoardHelper.getAllPossibleMoves(node,player)){ //my turn
+                //create new node
+                int[][] newNode = BoardHelper.getNewBoardAfterMove(node,move,player);
+                //recursive call
+                int childScore = MMAB(newNode,player,depth-1,false,alpha,beta);
+                if(childScore > score) score = childScore;
+                //update alpha
+                if(score > alpha) alpha = score;
+                if(beta <= alpha) break; //Beta Cutoff
+            }
+        }else{
+            //minimizing
+            score = Integer.MAX_VALUE;
+            for(Point move : BoardHelper.getAllPossibleMoves(node,oplayer)){ //opponent turn
+                //create new node
+                int[][] newNode = BoardHelper.getNewBoardAfterMove(node,move,oplayer);
+                //recursive call
+                int childScore = MMAB(newNode,player,depth-1,true,alpha,beta);
+                if(childScore < score) score = childScore;
+                //update beta
+                if(score < beta) beta = score;
+                if(beta <= alpha) break; //Alpha Cutoff
             }
         }
         return score;
