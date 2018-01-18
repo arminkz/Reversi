@@ -1,28 +1,9 @@
 package game;
 
-import player.ai.Minimax;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class BoardPrinter extends JFrame implements GameEngine {
-
-
-    //DEBUG CODE HERE
-    public static void main(String[] args) {
-        int[][] exampleBoard = new int[8][8];
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                exampleBoard[i][j] = 0;
-            }
-        }
-        exampleBoard[3][3] = 2;
-        exampleBoard[3][4] = 1;
-        exampleBoard[4][3] = 1;
-        exampleBoard[4][4] = 2;
-        Minimax.printMM(exampleBoard,1,5);
-    }
-
 
     public BoardCell[][] cells;
     int[][] board;

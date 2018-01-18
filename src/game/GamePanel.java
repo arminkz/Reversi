@@ -28,7 +28,7 @@ public class GamePanel extends JPanel implements GameEngine {
     JLabel tscore2;
 
 
-    GamePlayer player1 = new GreedyPlayer(1);
+    GamePlayer player1 = new HumanPlayer(1);
     GamePlayer player2 = new AIPlayer(2, 5);
 
     Timer player1HandlerTimer;
@@ -149,9 +149,9 @@ public class GamePanel extends JPanel implements GameEngine {
             else if(winner==2) totalscore2++;
             updateTotalScore();
             //restart
-            resetBoard();
-            turn=1;
-            manageTurn();
+            //resetBoard();
+            //turn=1;
+            //manageTurn();
         }
     }
 
