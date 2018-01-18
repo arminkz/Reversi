@@ -15,9 +15,9 @@ public class BoardCell extends JLabel implements MouseListener{
     GameEngine ge;
     JPanel parent;
 
-    int highlight = 0;
+    public int highlight = 0;
 
-    String text = "";
+    public String text = "";
 
     public BoardCell(GameEngine ge ,JPanel parent,int i,int j){
         this.ge = ge;
@@ -29,6 +29,9 @@ public class BoardCell extends JLabel implements MouseListener{
 
     @Override
     public void paint(Graphics g) {
+
+        int margin_left = this.getWidth() / 10;
+        int margin_top = this.getHeight() / 10;
 
         //draw highlight
         if(highlight == 1) {
@@ -54,11 +57,11 @@ public class BoardCell extends JLabel implements MouseListener{
         int value = ge.getBoardValue(i,j);
         if(value == 1){
             g.setColor(Color.WHITE);
-            g.fillOval(10,10,this.getWidth()-20,this.getHeight()-20);
+            g.fillOval(margin_left,margin_top,this.getWidth()-2*margin_left,this.getHeight()-2*margin_top);
         }
         else if(value == 2) {
             g.setColor(Color.BLACK);
-            g.fillOval(10,10,this.getWidth()-20,this.getHeight()-20);
+            g.fillOval(margin_left,margin_top,this.getWidth()-2*margin_left,this.getHeight()-2*margin_top);
         }
 
         if(!text.isEmpty()){

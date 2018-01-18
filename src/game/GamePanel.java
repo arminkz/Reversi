@@ -28,8 +28,8 @@ public class GamePanel extends JPanel implements GameEngine {
     JLabel tscore2;
 
 
-    GamePlayer player1 = new AIPlayer(1,6);
-    GamePlayer player2 = new AIPlayer(2, 3);
+    GamePlayer player1 = new GreedyPlayer(1);
+    GamePlayer player2 = new AIPlayer(2, 5);
 
     Timer player1HandlerTimer;
     Timer player2HandlerTimer;
@@ -92,13 +92,13 @@ public class GamePanel extends JPanel implements GameEngine {
         updateTotalScore();
 
         //AI Handler Timer (to unfreeze gui)
-        player1HandlerTimer = new Timer(500,(ActionEvent e) -> {
+        player1HandlerTimer = new Timer(100,(ActionEvent e) -> {
             handleAI(player1);
             player1HandlerTimer.stop();
             manageTurn();
         });
 
-        player2HandlerTimer = new Timer(500,(ActionEvent e) -> {
+        player2HandlerTimer = new Timer(100,(ActionEvent e) -> {
             handleAI(player2);
             player2HandlerTimer.stop();
             manageTurn();

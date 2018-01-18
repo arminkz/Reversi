@@ -1,5 +1,7 @@
 package game;
 
+import player.ai.Minimax;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -18,23 +20,20 @@ public class BoardPrinter extends JFrame implements GameEngine {
         exampleBoard[3][4] = 1;
         exampleBoard[4][3] = 1;
         exampleBoard[4][4] = 2;
-        BoardPrinter bp = new BoardPrinter(exampleBoard);
-        bp.cells[1][1].highlight = 10;
-        bp.cells[1][1].text = "+3";
-        bp.repaint();
+        Minimax.printMM(exampleBoard,1,5);
     }
 
 
-    BoardCell[][] cells;
+    public BoardCell[][] cells;
     int[][] board;
 
-    public BoardPrinter(int[][] board){
+    public BoardPrinter(int[][] board,String title){
 
         this.board = board;
 
         JPanel reversiBoard = new JPanel();
         reversiBoard.setLayout(new GridLayout(8,8));
-        reversiBoard.setPreferredSize(new Dimension(500,500));
+        reversiBoard.setPreferredSize(new Dimension(250,250));
         reversiBoard.setBackground(new Color(41,100, 59));
 
         //init board
@@ -49,13 +48,17 @@ public class BoardPrinter extends JFrame implements GameEngine {
         }
 
         this.add(reversiBoard);
-        this.setTitle("BoardPrinter");
+        this.setTitle(title);
         //this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.pack();
         this.setVisible(true);
 
         reversiBoard.repaint();
         //this.setSize(500,500);
+
+    }
+
+    public void showForm(){
 
     }
 
