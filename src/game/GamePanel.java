@@ -28,8 +28,8 @@ public class GamePanel extends JPanel implements GameEngine {
     JLabel tscore2;
 
 
-    GamePlayer player1 = new HumanPlayer(1);
-    GamePlayer player2 = new AIPlayer(2, 5);
+    GamePlayer player1 = new AIPlayer(1,5);
+    GamePlayer player2 = new AIPlayer2(2,8);
 
     Timer player1HandlerTimer;
     Timer player2HandlerTimer;

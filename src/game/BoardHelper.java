@@ -16,8 +16,8 @@ public class BoardHelper {
             return -1;
         else{
             //count stones
-            int p1s = getStoneCount(board,1);
-            int p2s = getStoneCount(board,2);
+            int p1s = getPlayerStoneCount(board,1);
+            int p2s = getPlayerStoneCount(board,2);
 
             if(p1s == p2s){
                 //tie
@@ -32,7 +32,17 @@ public class BoardHelper {
         }
     }
 
-    public static int getStoneCount(int[][] board, int player){
+    public static int getTotalStoneCount(int[][] board){
+        int c = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(board[i][j] != 0) c++;
+            }
+        }
+        return c;
+    }
+
+    public static int getPlayerStoneCount(int[][] board, int player){
         int score = 0;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {

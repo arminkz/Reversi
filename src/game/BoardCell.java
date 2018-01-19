@@ -56,11 +56,11 @@ public class BoardCell extends JLabel implements MouseListener{
         //draw piece
         int value = ge.getBoardValue(i,j);
         if(value == 1){
-            g.setColor(Color.WHITE);
+            g.setColor(Color.BLACK);
             g.fillOval(margin_left,margin_top,this.getWidth()-2*margin_left,this.getHeight()-2*margin_top);
         }
         else if(value == 2) {
-            g.setColor(Color.BLACK);
+            g.setColor(Color.WHITE);
             g.fillOval(margin_left,margin_top,this.getWidth()-2*margin_left,this.getHeight()-2*margin_top);
         }
 

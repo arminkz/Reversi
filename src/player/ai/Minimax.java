@@ -88,7 +88,7 @@ public class Minimax {
         int oplayer = (player==1) ? 2 : 1;
         //if no moves available then forfeit turn
         if((max && !BoardHelper.hasAnyMoves(node,player)) || (!max && !BoardHelper.hasAnyMoves(node,oplayer))){
-            System.out.println("Forfeit State Reached !");
+            //System.out.println("Forfeit State Reached !");
             return MMAB(node,player,depth-1,!max,alpha,beta,e);
         }
         int score;
