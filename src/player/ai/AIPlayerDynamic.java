@@ -22,7 +22,7 @@ public class AIPlayer extends GamePlayer {
 
     @Override
     public String playerName() {
-        return "Minimax AI (Depth " + searchDepth + ")";
+        return "Static AI (Depth " + searchDepth + ")";
     }
 
     @Override
