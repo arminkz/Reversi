@@ -21,6 +21,13 @@ public class DynamicEvaluator implements Evaluator {
     }
 
     public int eval(int[][] board , int player){
+
+        //terminal
+        if(BoardHelper.isGameFinished(board)){
+            return 1000*evalDiscDiff(board, player);
+        }
+
+        //semi-terminal
         switch (getGamePhase(board)){
             case EARLY_GAME:
                 return 1000*evalCorner(board,player) + 50*evalMobility(board,player);
