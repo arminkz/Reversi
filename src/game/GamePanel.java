@@ -13,7 +13,7 @@ public class GamePanel extends JPanel implements GameEngine {
     int[][] board;
 
     //player turn
-    //white plays first
+    //black plays first
     int turn = 1;
 
     //swing elements
@@ -28,8 +28,8 @@ public class GamePanel extends JPanel implements GameEngine {
     JLabel tscore2;
 
 
-    GamePlayer player1 = new AIPlayer(1,5);
-    GamePlayer player2 = new AIPlayer2(2,8);
+    GamePlayer player1 = new AIPlayerRealtimeKiller(1,6,true);
+    GamePlayer player2 = new AIPlayerDynamic(2,6);
 
     Timer player1HandlerTimer;
     Timer player2HandlerTimer;
@@ -92,13 +92,13 @@ public class GamePanel extends JPanel implements GameEngine {
         updateTotalScore();
 
         //AI Handler Timer (to unfreeze gui)
-        player1HandlerTimer = new Timer(100,(ActionEvent e) -> {
+        player1HandlerTimer = new Timer(1000,(ActionEvent e) -> {
             handleAI(player1);
             player1HandlerTimer.stop();
             manageTurn();
         });
 
-        player2HandlerTimer = new Timer(100,(ActionEvent e) -> {
+        player2HandlerTimer = new Timer(1000,(ActionEvent e) -> {
             handleAI(player2);
             player2HandlerTimer.stop();
             manageTurn();

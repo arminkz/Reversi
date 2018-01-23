@@ -8,8 +8,11 @@ import java.util.ArrayList;
 
 public class Minimax {
 
+    static int nodesExplored = 0;
+
     //returns max score move
     public static Point solve(int[][] board, int player,int depth,Evaluator e){
+        nodesExplored = 0;
         int bestScore = Integer.MIN_VALUE;
         Point bestMove = null;
         for(Point move : BoardHelper.getAllPossibleMoves(board,player)){
@@ -22,6 +25,7 @@ public class Minimax {
                 bestMove = move;
             }
         }
+        System.out.println("Nodes Explored : " + nodesExplored);
         return bestMove;
     }
 
@@ -80,6 +84,7 @@ public class Minimax {
 
     //returns minimax value for a given node with A/B pruning
     private static int MMAB(int[][] node,int player,int depth,boolean max,int alpha,int beta,Evaluator e){
+        nodesExplored++;
         //if terminal reached or depth limit reached evaluate
         if(depth == 0 || BoardHelper.isGameFinished(node)){
             //BoardPrinter bpe = new BoardPrinter(node,"Depth : " + depth);
