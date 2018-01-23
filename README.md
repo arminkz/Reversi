@@ -2,7 +2,6 @@
 Computer Reversi Game and also an AI Player for AI Competition.
 
 ![Alt text](/../master/doc/vs_greedy.gif?raw=true "AI vs Greedy")
-my AI (white) versus Greedy Player (black)
 
 
 this project consists of a GUI for Playing Othello and a AI Player that i wrote for my AI course.
