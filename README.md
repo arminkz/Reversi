@@ -16,6 +16,7 @@ The search algorithm is a minimax search with alpha-beta pruning.
 Evaluation Function
 -------------------
 * Realtime Evaluation : Evaluation function changes as you move from early-game to end-game with each move , using linear interpolation between static values.
+
 * Machine-Learning-Tuned Evaluation : i've used Hill-Climbing algorithm to train weights on each heuristic function based on game progress.
 
 
