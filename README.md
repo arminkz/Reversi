@@ -10,15 +10,16 @@
   <p align="center">AI Algorithm (Black) vs. Greedy Algorithm (White)</p>
 </p>
 
-<br/>
-<br/>
-
 Play Modes
 ----------
 * Human VS Human
 * Human VS AI
 * AI VS AI
 
+
+<br/>
+<br/>
+<br/>
 
 # AI Algorithm
 
