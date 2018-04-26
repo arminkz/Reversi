@@ -1,9 +1,9 @@
 # Reversi
-Computer Reversi Game and also an AI Player for AI Competition.
+
+<p>Computer Reversi Game and also an AI Player for AI Competition.</p>
+<p>this project consists of a GUI for Playing Othello and also an AI Player.</p>
 
 <br/>
-<br/>
-
 <p align="center">
   <img width="500" height="522" src="/../master/doc/vs_greedy.gif?raw=true"/>
   
@@ -12,7 +12,13 @@ Computer Reversi Game and also an AI Player for AI Competition.
 
 <br/>
 <br/>
-this project consists of a GUI for Playing Othello and a AI Player that i wrote for my AI course.
+
+Play Modes
+----------
+* Human VS Human
+* Human VS AI
+* AI VS AI
+
 
 # AI Algorithm
 
